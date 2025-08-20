@@ -324,6 +324,7 @@ def get_custom_css():
             }
         </style>
         """
+        return css_content
     else:
         return         <style>
             .stApp {
@@ -430,6 +431,7 @@ def get_custom_css():
             }
         </style>
         """
+        return css_content
 
 # Apply custom CSS
 st.markdown(get_custom_css(), unsafe_allow_html=True)
