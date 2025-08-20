@@ -1229,8 +1229,8 @@ elif st.session_state.current_page == 'Training':
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; color: #666; padding: 20px;'>
-    <p><strong>Information Management System (IMS)</strong> | Version 2.1.0</p>
+    <p><strong>Information Management System (IMS)</strong> | Version 0.0.7</p>
     <p>System Development Project | Corporate Systems Client</p>
-    <p>For technical support: support@company.com | Phone: +1 (555) 123-4567</p>
+    <p>For technical support: support@company.com | Phone: +966 (20) 123-4567</p>
 </div>
 """, unsafe_allow_html=True)
