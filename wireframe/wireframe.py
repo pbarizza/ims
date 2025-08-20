@@ -35,6 +35,10 @@ TRANSLATIONS = {
         'language': 'Language',
         'dark': 'Dark',
         'light': 'Light',
+        'font_size': 'Font Size',
+        'small': 'Small',
+        'medium': 'Medium',
+        'large': 'Large',
         'current_user': 'Current User',
         'system_administrator': 'System Administrator'
     },
@@ -58,6 +62,10 @@ TRANSLATIONS = {
         'language': 'Idioma',
         'dark': 'Oscuro',
         'light': 'Claro',
+        'font_size': 'Tamaño de Fuente',
+        'small': 'Pequeño',
+        'medium': 'Mediano',
+        'large': 'Grande',
         'current_user': 'Usuario Actual',
         'system_administrator': 'Administrador del Sistema'
     },
@@ -81,6 +89,10 @@ TRANSLATIONS = {
         'language': 'Langue',
         'dark': 'Sombre',
         'light': 'Clair',
+        'font_size': 'Taille de Police',
+        'small': 'Petit',
+        'medium': 'Moyen',
+        'large': 'Grand',
         'current_user': 'Utilisateur Actuel',
         'system_administrator': 'Administrateur Système'
     }
@@ -98,6 +110,9 @@ if 'theme' not in st.session_state:
 
 if 'language' not in st.session_state:
     st.session_state.language = 'en'
+
+if 'font_size' not in st.session_state:
+    st.session_state.font_size = 'medium'
 
 if 'sample_records' not in st.session_state:
     st.session_state.sample_records = [
@@ -185,13 +200,51 @@ def get_text(key):
 
 # Custom CSS based on theme
 def get_custom_css():
+    # Font size mapping
+    font_sizes = {
+        'small': {'base': '0.85rem', 'h1': '1.8rem', 'h2': '1.4rem'},
+        'medium': {'base': '1rem', 'h1': '2rem', 'h2': '1.6rem'},
+        'large': {'base': '1.15rem', 'h1': '2.2rem', 'h2': '1.8rem'}
+    }
+    
+    current_font = font_sizes[st.session_state.font_size]
+    
     if st.session_state.theme == 'dark':
-        return """
-        <style>
+        return         <style>
             .stApp {
                 background-color: #0e1117;
                 color: #fafafa;
+                font-size: {font_base};
             }
+            .stApp h1 {{
+                font-size: {font_h1} !important;
+            }}
+            .stApp h2 {{
+                font-size: {font_h2} !important;
+            }}
+            .settings-container {{
+                background-color: #262730;
+                padding: 0.5rem;
+                border-radius: 8px;
+                border: 1px solid #404040;
+                margin-bottom: 1rem;
+            }}
+            .settings-row {{
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }}
+            .settings-item {{
+                flex: 1;
+                min-width: 0;
+            }}
+            .settings-item .stSelectbox > div {{
+                font-size: 0.8rem;
+            }}
+            .settings-item .stSelectbox label {{
+                font-size: 0.75rem;
+                margin-bottom: 0.2rem;
+            }}""".format(font_base=current_font['base'], font_h1=current_font['h1'], font_h2=current_font['h2'])
             .main-header {
                 background: linear-gradient(90deg, #1f4e79 0%, #2d5aa0 100%);
                 padding: 1rem;
@@ -272,12 +325,41 @@ def get_custom_css():
         </style>
         """
     else:
-        return """
-        <style>
+        return         <style>
             .stApp {
                 background-color: #ffffff;
                 color: #000000;
+                font-size: {font_base};
             }
+            .stApp h1 {{
+                font-size: {font_h1} !important;
+            }}
+            .stApp h2 {{
+                font-size: {font_h2} !important;
+            }}
+            .settings-container {{
+                background-color: #f8f9fa;
+                padding: 0.5rem;
+                border-radius: 8px;
+                border: 1px solid #e0e0e0;
+                margin-bottom: 1rem;
+            }}
+            .settings-row {{
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }}
+            .settings-item {{
+                flex: 1;
+                min-width: 0;
+            }}
+            .settings-item .stSelectbox > div {{
+                font-size: 0.8rem;
+            }}
+            .settings-item .stSelectbox label {{
+                font-size: 0.75rem;
+                margin-bottom: 0.2rem;
+            }}""".format(font_base=current_font['base'], font_h1=current_font['h1'], font_h2=current_font['h2'])
             .main-header {
                 background: linear-gradient(90deg, #007acc 0%, #005a9e 100%);
                 padding: 1rem;
@@ -365,32 +447,49 @@ def login_user(username, password):
 
 # Login page
 if not st.session_state.logged_in:
-    # Language and theme selection at the top
-    col1, col2, col3 = st.columns([1, 1, 1])
+    # Settings at the top in a compact container
+    st.markdown("""
+    <div class="settings-container">
+        <div style="text-align: center; font-weight: bold; margin-bottom: 0.5rem;">Settings</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("")  # Empty space
-    
-    with col2:
-        language_options = {'English': 'en', 'Español': 'es', 'Français': 'fr'}
+        language_options = {'EN': 'en', 'ES': 'es', 'FR': 'fr'}
         selected_lang = st.selectbox(
             get_text('language'),
             options=list(language_options.keys()),
-            index=list(language_options.values()).index(st.session_state.language)
+            index=list(language_options.values()).index(st.session_state.language),
+            key="login_lang"
         )
         if language_options[selected_lang] != st.session_state.language:
             st.session_state.language = language_options[selected_lang]
             st.rerun()
     
-    with col3:
+    with col2:
         theme_options = {get_text('dark'): 'dark', get_text('light'): 'light'}
         selected_theme = st.selectbox(
             get_text('theme'),
             options=list(theme_options.keys()),
-            index=list(theme_options.values()).index(st.session_state.theme)
+            index=list(theme_options.values()).index(st.session_state.theme),
+            key="login_theme"
         )
         if theme_options[selected_theme] != st.session_state.theme:
             st.session_state.theme = theme_options[selected_theme]
+            st.rerun()
+    
+    with col3:
+        font_options = {get_text('small'): 'small', get_text('medium'): 'medium', get_text('large'): 'large'}
+        selected_font = st.selectbox(
+            get_text('font_size'),
+            options=list(font_options.keys()),
+            index=list(font_options.values()).index(st.session_state.font_size),
+            key="login_font"
+        )
+        if font_options[selected_font] != st.session_state.font_size:
+            st.session_state.font_size = font_options[selected_font]
             st.rerun()
     
     # Centered login form
@@ -434,7 +533,7 @@ if not st.session_state.logged_in:
     # Footer for login page
     st.markdown("""
     <div class="footer">
-        <p><strong>Information Management System (IMS)</strong> | Version 2.1.0</p>
+        <p><strong>Information Management System (IMS)</strong> | Version 0.0.7</p>
         <p>System Development Project | Corporate Systems Client</p>
         <p>For technical support: support@company.com | Phone: +1 (555) 123-4567</p>
     </div>
@@ -455,8 +554,8 @@ else:
     with st.sidebar:
         st.markdown(f"### **Navigation**")
         
-        # Theme and language controls
-        col1, col2 = st.columns(2)
+        # Theme, language, and font size controls
+        col1, col2, col3 = st.columns(3)
         with col1:
             theme_options = {get_text('dark'): 'dark', get_text('light'): 'light'}
             selected_theme = st.selectbox(
@@ -470,7 +569,7 @@ else:
                 st.rerun()
         
         with col2:
-            language_options = {'English': 'en', 'Español': 'es', 'Français': 'fr'}
+            language_options = {'EN': 'en', 'ES': 'es', 'FR': 'fr'}
             selected_lang = st.selectbox(
                 get_text('language'),
                 options=list(language_options.keys()),
@@ -479,6 +578,18 @@ else:
             )
             if language_options[selected_lang] != st.session_state.language:
                 st.session_state.language = language_options[selected_lang]
+                st.rerun()
+        
+        with col3:
+            font_options = {get_text('small'): 'small', get_text('medium'): 'medium', get_text('large'): 'large'}
+            selected_font = st.selectbox(
+                get_text('font_size'),
+                options=list(font_options.keys()),
+                index=list(font_options.values()).index(st.session_state.font_size),
+                key="sidebar_font"
+            )
+            if font_options[selected_font] != st.session_state.font_size:
+                st.session_state.font_size = font_options[selected_font]
                 st.rerun()
         
         st.markdown("---")
@@ -646,7 +757,7 @@ else:
     # Footer
     st.markdown("""
     <div class="footer">
-        <p><strong>Information Management System (IMS)</strong> | Version 2.1.0</p>
+        <p><strong>Information Management System (IMS)</strong> | Version 0.0.7</p>
         <p>System Development Project | Corporate Systems Client</p>
         <p>For technical support: support@company.com | Phone: +1 (555) 123-4567</p>
     </div>
