@@ -553,12 +553,12 @@ else:
     # Main application (logged in)
 
     # Header
-    st.markdown("""
-    <div class="main-header">
-        <h1>{}</h1>
-        <p><strong>System Development Project</strong> | Client: Corporate Systems Client | Project Manager: System Development Engineer</p>
-    </div>
-    """.format(get_text('login_title')), unsafe_allow_html=True)
+    #st.markdown("""
+    #<div class="main-header">
+    #    <h1>{}</h1>
+    #    <p><strong>System Development Project</strong> | Client: Corporate Systems Client | Project Manager: System Development Engineer</p>
+    #</div>
+    #""".format(get_text('login_title')), unsafe_allow_html=True)
 
     # Sidebar Navigation
     with st.sidebar:
