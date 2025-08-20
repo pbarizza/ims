@@ -214,7 +214,7 @@ def get_custom_css():
                 border-radius: 15px;
                 border: 1px solid #404040;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                margin-top: 5rem;
+                margin-top: 2rem;
             }
             .login-header {
                 text-align: center;
@@ -299,7 +299,7 @@ def get_custom_css():
                 border-radius: 15px;
                 border: 1px solid #e0e0e0;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                margin-top: 5rem;
+                margin-top: 2rem;
             }
             .login-header {
                 text-align: center;
@@ -366,9 +366,12 @@ def login_user(username, password):
 # Login page
 if not st.session_state.logged_in:
     # Language and theme selection at the top
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 1, 1, 1])
+    col1, col2, col3 = st.columns([1, 1, 1])
     
-    with col4:
+    with col1:
+        st.markdown("")  # Empty space
+    
+    with col2:
         language_options = {'English': 'en', 'Español': 'es', 'Français': 'fr'}
         selected_lang = st.selectbox(
             get_text('language'),
@@ -379,7 +382,7 @@ if not st.session_state.logged_in:
             st.session_state.language = language_options[selected_lang]
             st.rerun()
     
-    with col5:
+    with col3:
         theme_options = {get_text('dark'): 'dark', get_text('light'): 'light'}
         selected_theme = st.selectbox(
             get_text('theme'),
@@ -391,9 +394,9 @@ if not st.session_state.logged_in:
             st.rerun()
     
     # Centered login form
-    col1, col2, col3 = st.columns([1, 3, 1])
+    col1, col2, col3 = st.columns([1, 2, 1])
     
-    with col3:
+    with col2:
         st.markdown("""
         <div class="login-container">
             <div class="login-header">
@@ -427,6 +430,15 @@ if not st.session_state.logged_in:
         
         # Demo credentials info
         st.info("Demo credentials: username: 'demo', password: 'demo'")
+    
+    # Footer for login page
+    st.markdown("""
+    <div class="footer">
+        <p><strong>Information Management System (IMS)</strong> | Version 2.1.0</p>
+        <p>System Development Project | Corporate Systems Client</p>
+        <p>For technical support: support@company.com | Phone: +1 (555) 123-4567</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 else:
     # Main application (logged in)
