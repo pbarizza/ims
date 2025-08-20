@@ -391,7 +391,7 @@ if not st.session_state.logged_in:
             st.rerun()
     
     # Centered login form
-    col1, col2, col3, col4, col5 = st.columns([1, 1, 3, 1, 1])
+    col1, col2, col3 = st.columns([1, 3, 1])
     
     with col3:
         st.markdown("""
